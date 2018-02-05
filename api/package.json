@@ -1,0 +1,26 @@
+{
+  "name": "hapi-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava --verbose"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "boom": "^7.1.1",
+    "credit-card-type": "^6.1.1",
+    "glue": "^5.0.0",
+    "hapi": "^17.2.0",
+    "hapi-mongodb": "^7.1.0",
+    "hapi-test": "^5.2.0",
+    "mongodb": "^3.0.2",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "eslint": "^4.17.0",
+    "eslint-config-google": "^0.9.1"
+  }
+}
