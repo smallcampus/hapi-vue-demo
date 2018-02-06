@@ -3,6 +3,8 @@
 const test = require('ava');
 const Glue = require('glue');
 const {manifest, options} = require('../manifest');
+// const winston = require('winston');
+// winston.level = 'debug';
 
 let server;
 

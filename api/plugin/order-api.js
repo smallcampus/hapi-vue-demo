@@ -5,8 +5,41 @@ const Boom = require('boom');
 const schemaForm = require('../schema').form;
 const schemaDbOrder = require('../schema').dbOrder;
 const Joi = require('joi');
+const winston = require('winston');
 
 exports.register = function(server, options) {
+    const ObjectID = server.mongo.ObjectID;
+
+    // ==== Cache ==========================
+    const getOrderById = async (orderId)=> {
+        let id;
+        try {
+            id = new ObjectID(orderId);
+        } catch (err) {
+            throw Boom.badRequest('invalid objectID');
+        }
+        winston.debug('getOrderById hit db');
+        return await server.mongo.db.collection('orders')
+            .tryFindOne({_id: id});
+    };
+    server.method('getOrderById', getOrderById, {
+        cache: {
+            expiresIn: 30 * 1000,
+            generateTimeout: 100,
+        },
+    });
+    const getOrderByRefId = async (refId)=> {
+        winston.debug('getOrderByRefId hit db');
+        return await server.mongo.db.collection('orders')
+            .tryFindOne({refId: refId});
+    };
+    server.method('getOrderByRefId', getOrderByRefId, {
+        cache: {
+            expiresIn: 30 * 1000,
+            generateTimeout: 100,
+        },
+    });
+
     // Create order
     server.route({
         method: 'POST',
@@ -49,8 +82,6 @@ exports.register = function(server, options) {
         method: 'GET',
         path: '/order/find',
         async handler(request) {
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
             const refId = request.query.refId;
             const orderId = request.query.orderId;
             if (!refId && !orderId) {
@@ -60,18 +91,10 @@ exports.register = function(server, options) {
                 throw Boom.badRequest('either param refId or orderId');
             }
             if (refId) {
-                return await db.collection('orders')
-                    .tryFindOne({refId: refId});
+                return await server.methods.getOrderByRefId(refId);
             }
             if (orderId) {
-                let id;
-                try {
-                     id = new ObjectID(orderId);
-                } catch (err) {
-                    throw Boom.badRequest('invalid objectID');
-                }
-                return await db.collection('orders')
-                    .tryFindOne({_id: id});
+                return await server.methods.getOrderById(orderId);
             }
 
             throw Boom.internal('Internal error');

@@ -2,6 +2,19 @@
 
 const Joi = require('joi');
 
+/**
+ * Contain all entity schema used by request and response
+ */
+
+/**
+ * Example value:
+ * {
+ *     customerName: 'Test Mak',
+ *     customerPhone: '88888888',
+ *     currency: 'HKD',
+ *     price: 100.1
+ * }
+ */
 const formOrder = {
     customerName: Joi.string()
         .regex(/^[a-zA-Z\s\.,]+$/)
@@ -16,7 +29,7 @@ const formOrder = {
         .precision(2)
         .min(0)
         .max(999999999)
-        .example('100.12'),
+        .example(100.12),
 }
 
 const dbOrder = {
@@ -33,7 +46,7 @@ const dbOrder = {
         .precision(2)
         .min(0)
         .max(999999999)
-        .example('100.12'),
+        .example(100.12),
     gateway: Joi.string()
         .example('a'),
     refId: Joi.string()
@@ -42,6 +55,15 @@ const dbOrder = {
         .example('uuid'),
 }
 
+/**
+ * Example value:
+ * {
+ *     name: 'Test Mak',
+ *     number: '378282246310005',
+ *     expiration: '2000/01',
+ *     ccv: '123'
+ * }
+ */
 const formPayment = {
     name: Joi.string()
         .regex(/^[a-zA-Z\s\.,]+$/)

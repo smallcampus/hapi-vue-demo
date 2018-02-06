@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Main script to start the server together with SwaggerUI
+ */
+
 const Glue = require('glue');
 const {manifest, options} = require('./manifest');
 
@@ -14,6 +18,7 @@ const swaggerOptions = {
     },
 };
 
+// Inject swagger UI component
 manifest.register.plugins.push({plugin: Inert});
 manifest.register.plugins.push({plugin: Vision});
 manifest.register.plugins.push({

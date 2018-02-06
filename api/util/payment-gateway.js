@@ -17,6 +17,7 @@ const paymentGateways = {
             return {gateway: 'b', refId: uuidv4()};
         },
     }};
+
 /**
  * @method
  * @param {Object} order object

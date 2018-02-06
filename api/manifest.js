@@ -1,9 +1,21 @@
 'use strict';
 
+/**
+ * Contain Glue manifest for configure the server
+ */
+
 const manifest = {
     server: {
         host: 'localhost',
         port: 8000,
+        cache: [
+            {
+                // Default cache
+                engine: require('catbox-redis'),
+                host: '127.0.0.1',
+                partition: 'cache',
+            },
+        ],
     },
     register: {
         plugins: [
