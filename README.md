@@ -1,5 +1,10 @@
 ##Demo
 
+####Project Description
+
+This project demo the use of hapi, swagger, mongo, redis and vue to perform a payment process.
+It contains an API built with hapi and a CMS built with vue.
+
 ####Requirement
 - npm (5.6.0)
 - docker (17.12.0-ce)
