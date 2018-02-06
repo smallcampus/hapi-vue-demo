@@ -1,4 +1,5 @@
 ##Demo
+
 ####Requirement
 - npm (5.6.0)
 - docker (17.12.0-ce)
@@ -19,12 +20,14 @@ docker run --name redis -p 6379:6379 -d redis:4.0.8
 3. run api
 
 ```
+npm install --prefix api
 npm start --prefix api
 ```
 
 4. run cms
 
 ```
+npm install --prefix web
 npm start --prefix web
 ```
 
