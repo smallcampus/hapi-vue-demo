@@ -26,12 +26,16 @@ test.serial('endpoint test | GET /order/create | AMEX | 200', async (t) => {
         payload: {
             order: testOrder,
             payment: {
+                name: 'Test Mak',
                 number: '378282246310005', // AMEX card
+                expiration: '2017/01',
+                ccv: '111',
             },
         },
     };
 
     const res = await server.inject(request);
+
     t.is(res.statusCode, 200, '200');
 
     order = res.result;

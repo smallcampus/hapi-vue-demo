@@ -2,6 +2,7 @@
 
 const Gateway = require('../util/payment-gateway');
 const Boom = require('boom');
+const schemaForm = require('../schema').form;
 
 exports.register = function(server, options) {
     // Create order
@@ -12,12 +13,6 @@ exports.register = function(server, options) {
             const db = request.mongo.db;
             const reqOrder = request.payload.order;
             const payment = request.payload.payment;
-
-            if (!reqOrder || !payment) {
-                throw Boom.badRequest('order and payment are required.');
-            }
-
-            // TODO req validation
 
             const gateway = Gateway.getPaymentGateway(reqOrder, payment);
 
@@ -31,6 +26,11 @@ exports.register = function(server, options) {
                     throw Boom.internal('Internal MongoDB error', err);
                 });
             return dbResult.ops[0];
+        },
+        config: {
+            validate: {
+                payload: schemaForm,
+            },
         },
     });
     // Get order
