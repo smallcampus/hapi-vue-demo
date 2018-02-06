@@ -14,10 +14,13 @@
     "glue": "^5.0.0",
     "hapi": "^17.2.0",
     "hapi-mongodb": "^7.1.0",
+    "hapi-swagger": "^9.0.2",
     "hapi-test": "^5.2.0",
+    "inert": "^5.1.0",
     "joi": "^13.1.2",
     "mongodb": "^3.0.2",
     "uuid": "^3.2.1",
+    "vision": "^5.3.1",
     "vue-material": "^1.0.0-beta-7"
   },
   "devDependencies": {

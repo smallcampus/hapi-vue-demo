@@ -3,6 +3,8 @@
 const Gateway = require('../util/payment-gateway');
 const Boom = require('boom');
 const schemaForm = require('../schema').form;
+const schemaDbOrder = require('../schema').dbOrder;
+const Joi = require('joi');
 
 exports.register = function(server, options) {
     // Create order
@@ -30,6 +32,15 @@ exports.register = function(server, options) {
         config: {
             validate: {
                 payload: schemaForm,
+            },
+            tags: ['api'], // Swagger
+            response: {
+                failAction: async (request, h, err) => {
+                    console.log(err);
+                    throw err;
+                },
+                // sample: 0, //REVIEW Performance / Documentation
+                schema: schemaDbOrder,
             },
         },
     });
@@ -64,6 +75,26 @@ exports.register = function(server, options) {
             }
 
             throw Boom.internal('Internal error');
+        },
+        config: {
+            tags: ['api'], // Swagger
+            notes: 'Either refId or orderId should be provided',
+            validate: {
+                query: {
+                    refId: Joi.string()
+                        .description('refId'),
+                    orderId: Joi.string()
+                        .description('orderId'),
+                },
+            },
+            response: {
+                failAction: async (request, h, err) => {
+                    console.log(err);
+                    throw err;
+                },
+                // sample: 0, //REVIEW Performance / Documentation
+                schema: schemaDbOrder,
+            },
         },
     });
 };

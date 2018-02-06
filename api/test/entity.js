@@ -2,9 +2,22 @@
 
 const test = require('ava');
 const Joi = require('joi');
-const {form} = require('../schema');
+const {form, dbOrder} = require('../schema');
 
-test('entity test | ok', async (t) => {
+test('entity test | dbOrder | ok', async (t) => {
+    await Joi.validate({
+        _id: '5a7981d8189a28c2d6cae105',
+        gateway: 'a',
+        refId: '3d7f2d3f-2236-40b4-b095-80119a031cbe',
+        customerName: 'Test Mak',
+        customerPhone: '88888888',
+        currency: 'HKD',
+        price: 100.1,
+    }, dbOrder);
+    t.pass();
+});
+
+test('entity test | form | ok', async (t) => {
     await Joi.validate({
         order: {
             customerName: 'Test Mak',
@@ -22,7 +35,7 @@ test('entity test | ok', async (t) => {
     t.pass();
 });
 
-test('entity test | ok 2', async (t) => {
+test('entity test | form | ok 2', async (t) => {
     await Joi.validate({
         order: {
             customerName: 'Testfdsafdsfadsdfdsa Makdsafdsafdsafdsa',
@@ -40,7 +53,7 @@ test('entity test | ok 2', async (t) => {
     t.pass();
 });
 
-test('entity test | ok 3', async (t) => {
+test('entity test | form | ok 3', async (t) => {
     await Joi.validate({
         order: {
             customerName: 'Test. Mak,',
@@ -58,7 +71,7 @@ test('entity test | ok 3', async (t) => {
     t.pass();
 });
 
-test('entity test | wrong price min', async (t) => {
+test('entity test | form | wrong price min', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -80,7 +93,7 @@ test('entity test | wrong price min', async (t) => {
     }
 });
 
-test('entity test | wrong price precision', async (t) => {
+test('entity test | form | wrong price precision', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -102,7 +115,7 @@ test('entity test | wrong price precision', async (t) => {
     }
 });
 
-test('entity test | wrong price max', async (t) => {
+test('entity test | form | wrong price max', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -124,7 +137,7 @@ test('entity test | wrong price max', async (t) => {
     }
 });
 
-test('entity test | wrong card number', async (t) => {
+test('entity test | form | wrong card number', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -146,7 +159,7 @@ test('entity test | wrong card number', async (t) => {
     }
 });
 
-test('entity test | wrong ccv', async (t) => {
+test('entity test | form | wrong ccv', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -168,7 +181,7 @@ test('entity test | wrong ccv', async (t) => {
     }
 });
 
-test('entity test | wrong ccv2', async (t) => {
+test('entity test | form | wrong ccv2', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -190,7 +203,7 @@ test('entity test | wrong ccv2', async (t) => {
     }
 });
 
-test('entity test | wrong expiry', async (t) => {
+test('entity test | form | wrong expiry', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -212,7 +225,7 @@ test('entity test | wrong expiry', async (t) => {
     }
 });
 
-test('entity test | wrong name', async (t) => {
+test('entity test | form | wrong name', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -234,7 +247,7 @@ test('entity test | wrong name', async (t) => {
     }
 });
 
-test('entity test | wrong name 2', async (t) => {
+test('entity test | form | wrong name 2', async (t) => {
     try {
         await Joi.validate({
             order: {
@@ -256,7 +269,7 @@ test('entity test | wrong name 2', async (t) => {
     }
 });
 
-test('entity test | wrong phone', async (t) => {
+test('entity test | form | wrong phone', async (t) => {
     try {
         await Joi.validate({
             order: {
