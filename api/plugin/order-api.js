@@ -40,6 +40,20 @@ exports.register = function(server, options) {
         },
     });
 
+    // ==== Other ============================
+    const defaultValidateFailAction = async (request, h, err) => {
+        if (process.env.NODE_ENV === 'production') {
+            // In prod, log a limited error message and throw the
+            // default Bad Request error.
+            winston.error('ValidationError:', err.message);
+            throw Boom.badRequest(`Invalid request payload input`);
+        } else {
+            // During development, log and respond with the full error.
+            winston.error(err);
+            throw err;
+        }
+    };
+
     // Create order
     server.route({
         method: 'POST',
@@ -64,6 +78,7 @@ exports.register = function(server, options) {
         },
         config: {
             validate: {
+                failAction: defaultValidateFailAction,
                 payload: schemaForm,
             },
             tags: ['api'], // Swagger
@@ -83,35 +98,19 @@ exports.register = function(server, options) {
         path: '/order/find',
         async handler(request) {
             const refId = request.query.refId;
-            const orderId = request.query.orderId;
             const customerName = request.query.customerName;
-            if (!refId && !orderId && !customerName) {
-                throw Boom.badRequest(
-                    'missing param refId or orderId or customerName');
-            }
-            if ((!refId || !customerName) && !orderId) {
-                throw Boom.badRequest('refId must with customerName');
-            }
-            if (refId) {
-                return await server.methods.getOrderByRefId(refId,
-                    customerName);
-            }
-            if (orderId) {
-                return await server.methods.getOrderById(orderId);
-            }
-
-            throw Boom.internal('Internal error');
+            return await server.methods.getOrderByRefId(refId,
+                customerName);
         },
         config: {
             tags: ['api'], // Swagger
             notes: 'Either refId or orderId should be provided',
             validate: {
+                // failAction: defaultValidateFailAction,
                 query: {
-                    refId: Joi.string()
+                    refId: Joi.string().required()
                         .description('refId'),
-                    orderId: Joi.string()
-                        .description('orderId'),
-                    customerName: Joi.string()
+                    customerName: Joi.string().required()
                         .description('customerName'),
                 },
             },

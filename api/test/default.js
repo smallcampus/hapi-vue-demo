@@ -51,10 +51,10 @@ test.serial('endpoint test | GET /order/create | AMEX | 200', async (t) => {
     t.true(order.refId !== undefined, 'must has refId');
 });
 
-test.serial('endpoint test | GET /order/find?refId | AMEX | 200', async (t) => {
+test.serial('endpoint test | GET /order/find?refId&customerName | AMEX | 200', async (t) => {
     const request = {
         method: 'GET',
-        url: `/order/find?refId=${order.refId}`,
+        url: `/order/find?refId=${order.refId}&customerName=${order.customerName}`,
         payload: {},
     };
 
@@ -72,59 +72,15 @@ test.serial('endpoint test | GET /order/find?refId | AMEX | 200', async (t) => {
     t.true(order.refId !== undefined, 'must has refId');
 });
 
-test.serial('endpoint test | GET /order/find?orderId | AMEX | 200',
-    async (t) => {
-        const request = {
-            method: 'GET',
-            url: `/order/find?orderId=${order._id}`,
-            payload: {},
-        };
-
-        const res = await server.inject(request);
-        t.is(res.statusCode, 200);
-
-        order = res.result;
-        t.true(order !== undefined, 'must has order');
-        t.is(order.currency, testOrder.currency, 'currency');
-        t.is(order.price, testOrder.price, 'price');
-        t.is(order.customerPhone, testOrder.customerPhone, 'customerPhone');
-        t.is(order.customerName, testOrder.customerName, 'customerName');
-        t.is(order.gateway, 'a', 'gateway');
-        t.true(order._id !== undefined, 'must has _id');
-        t.true(order.refId !== undefined, 'must has refId');
-    });
-
-test('endpoint test | GET /order/find?refId | 404', async (t) => {
+test('endpoint test | GET /order/find?refId&customerName | 404', async (t) => {
     const request = {
         method: 'GET',
-        url: `/order/find?refId=unknown`,
+        url: `/order/find?refId=unknown&customerName=unknown`,
         payload: {},
     };
 
     const res = await server.inject(request);
     t.is(res.statusCode, 404);
-});
-
-test('endpoint test | GET /order/find?orderId | 404', async (t) => {
-    const request = {
-        method: 'GET',
-        url: `/order/find?orderId=507f191e810c19729de860ea`,
-        payload: {},
-    };
-
-    const res = await server.inject(request);
-    t.is(res.statusCode, 404);
-});
-
-test('endpoint test | GET /order/find?orderId | 400', async (t) => {
-    const request = {
-        method: 'GET',
-        url: `/order/find?orderId=unknown`, // invalid ObjectID
-        payload: {},
-    };
-
-    const res = await server.inject(request);
-    t.is(res.statusCode, 400);
 });
 
 test('endpoint test | GET /order/unknown | 404', async (t) => {
