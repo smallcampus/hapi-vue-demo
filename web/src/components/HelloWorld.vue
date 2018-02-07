@@ -73,22 +73,26 @@ export default {
     async createOrder (form) {
       let json = await this.createOrderApi(form)
 
-      // Show success dialog
-      this.dialog.title = 'Order created'
-      this.dialog.content = `<div>Gateway: ${json.gateway}</div><div>RefId: ${json.refId}</div>`
-      this.dialog.show = true
+      if (json) {
+        // Show success dialog
+        this.dialog.title = 'Order created'
+        this.dialog.content = `<div>Gateway: ${json.gateway}</div><div>RefId: ${json.refId}</div>`
+        this.dialog.show = true
+      }
     },
     async findOrder (search) {
       let json = await this.findOrderApi(search)
 
-      // Show sucess dialog
-      this.dialog.title = 'Order detail'
-      this.dialog.content = `
+      if (json) {
+        // Show sucess dialog
+        this.dialog.title = 'Order detail'
+        this.dialog.content = `
         <div>Customer Name: ${json.customerName}</div>
         <div>Customer Number: ${json.customerPhone}</div>
         <div>Currency: ${json.currency}</div>
         <div>Price: ${json.price}</div>`
-      this.dialog.show = true
+        this.dialog.show = true
+      }
     },
 
     // ==== Api Functions ===============
@@ -101,6 +105,16 @@ export default {
             'Content-Type': 'application/json'
           }
         })
+
+        if (result.status !== 200) {
+          const body = await result.json()
+          // Show error dialog
+          this.dialog.title = `${body.statusCode} ${body.error}`
+          this.dialog.content = body.message
+          this.dialog.show = true
+          return
+        }
+
         return await result.json()
       } catch (err) {
         // Show error dialog
@@ -111,12 +125,22 @@ export default {
     },
     async findOrderApi (search) {
       try {
-        let result = await fetch(`/proxy/order/find?refId=${search.refId}`, {
+        let result = await fetch(`/proxy/order/find?refId=${search.refId}&customerName=${search.name}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })
+
+        if (result.status !== 200) {
+          const body = await result.json()
+          // Show error dialog
+          this.dialog.title = `${body.statusCode} ${body.error}`
+          this.dialog.content = body.message
+          this.dialog.show = true
+          return
+        }
+
         return await result.json()
       } catch (err) {
         // Show error dialog

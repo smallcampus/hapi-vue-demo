@@ -28,10 +28,10 @@ exports.register = function(server, options) {
             generateTimeout: 100,
         },
     });
-    const getOrderByRefId = async (refId)=> {
+    const getOrderByRefId = async (refId, customerName)=> {
         winston.debug('getOrderByRefId hit db');
         return await server.mongo.db.collection('orders')
-            .tryFindOne({refId: refId});
+            .tryFindOne({refId: refId, customerName: customerName});
     };
     server.method('getOrderByRefId', getOrderByRefId, {
         cache: {
@@ -84,14 +84,17 @@ exports.register = function(server, options) {
         async handler(request) {
             const refId = request.query.refId;
             const orderId = request.query.orderId;
-            if (!refId && !orderId) {
-                throw Boom.badRequest('missing param refId or orderId');
+            const customerName = request.query.customerName;
+            if (!refId && !orderId && !customerName) {
+                throw Boom.badRequest(
+                    'missing param refId or orderId or customerName');
             }
-            if (refId && orderId) {
-                throw Boom.badRequest('either param refId or orderId');
+            if ((!refId || !customerName) && !orderId) {
+                throw Boom.badRequest('refId must with customerName');
             }
             if (refId) {
-                return await server.methods.getOrderByRefId(refId);
+                return await server.methods.getOrderByRefId(refId,
+                    customerName);
             }
             if (orderId) {
                 return await server.methods.getOrderById(orderId);
@@ -108,6 +111,8 @@ exports.register = function(server, options) {
                         .description('refId'),
                     orderId: Joi.string()
                         .description('orderId'),
+                    customerName: Joi.string()
+                        .description('customerName'),
                 },
             },
             response: {
