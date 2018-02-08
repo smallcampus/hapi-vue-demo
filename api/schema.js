@@ -53,6 +53,8 @@ const dbOrder = {
         .example('uuid'),
     _id: Joi.any()
         .example('uuid'),
+    status: Joi.string()
+        .example('charged'),
 }
 
 /**

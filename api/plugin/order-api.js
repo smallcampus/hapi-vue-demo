@@ -64,16 +64,40 @@ exports.register = function(server, options) {
 
             const gateway = server.methods.getPaymentGateway(reqOrder, payment);
 
-            let result = await gateway.proceed(reqOrder, payment);
-            let order = Object.assign(reqOrder, result);
-            let dbResult = await db.collection('orders')
+            if (!gateway) {
+                throw Boom.badRequest('unsupported gateway');
+            }
+
+            // Assume every request is a new order
+            // Two phrase commit
+            reqOrder.status = 'pending';
+            let resultFirst = await db.collection('orders')
                 .insertMany([
-                    order,
+                    reqOrder,
                 ])
                 .catch((err)=>{
                     throw Boom.internal('Internal MongoDB error', err);
                 });
-            return dbResult.ops[0];
+            let dbOrder = resultFirst.ops[0];
+
+            // Create charge in payment gateway
+            let resultPayment = await gateway.proceed(dbOrder, payment);
+
+            dbOrder = Object.assign(dbOrder, resultPayment);
+            dbOrder.status = 'charged';
+
+            // Commit order transaction
+            let resultSecond = await db.collection('orders')
+                .findOneAndUpdate({_id: dbOrder._id, status: 'pending'}, dbOrder)
+                .catch((err)=>{
+                    throw Boom.internal('Internal MongoDB error', err);
+                });
+            if (!resultSecond) {
+                console.error('invalid order status', dbOrder);
+                throw Boom.internal('invalid order status', dbOrder);
+            }
+
+            return dbOrder;
         },
         config: {
             validate: {

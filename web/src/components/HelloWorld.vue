@@ -23,7 +23,7 @@
         </md-field>
         <md-field>
           <label>Price</label>
-          <md-input v-model="form.order.price"/>
+          <md-input v-model.number="form.order.price"/>
         </md-field>
         <md-field>
           <label>Creditcard holder name</label>
@@ -163,7 +163,7 @@ export default {
         payment: {
           name: 'Test Mak',
           number: '378282246310005',
-          expiration: '2000/01',
+          expiration: '2020/01',
           ccv: '123'
         }
       },
