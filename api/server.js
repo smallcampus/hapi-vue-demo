@@ -6,6 +6,7 @@
 
 const Glue = require('glue');
 const {manifest, options} = require('./manifest');
+const PaymentGateway = require('./plugin/payment');
 
 const Inert = require('inert');
 const Vision = require('vision');
@@ -18,6 +19,9 @@ const swaggerOptions = {
     },
 };
 
+// Inject real payment gateway
+
+
 // Inject swagger UI component
 manifest.register.plugins.push({plugin: Inert});
 manifest.register.plugins.push({plugin: Vision});
@@ -25,6 +29,7 @@ manifest.register.plugins.push({
     plugin: HapiSwagger,
     options: swaggerOptions,
 });
+manifest.register.plugins.push({plugin: PaymentGateway});
 
 const startServer = async function() {
     try {

@@ -1,6 +1,5 @@
 'use strict';
 
-const Gateway = require('../util/payment-gateway');
 const Boom = require('boom');
 const schemaForm = require('../schema').form;
 const schemaDbOrder = require('../schema').dbOrder;
@@ -63,10 +62,10 @@ exports.register = function(server, options) {
             const reqOrder = request.payload.order;
             const payment = request.payload.payment;
 
-            const gateway = Gateway.getPaymentGateway(reqOrder, payment);
+            const gateway = server.methods.getPaymentGateway(reqOrder, payment);
 
             let result = await gateway.proceed(reqOrder, payment);
-            let order = Object.assign(result, reqOrder);
+            let order = Object.assign(reqOrder, result);
             let dbResult = await db.collection('orders')
                 .insertMany([
                     order,

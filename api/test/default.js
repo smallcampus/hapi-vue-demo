@@ -3,8 +3,10 @@
 const test = require('ava');
 const Glue = require('glue');
 const {manifest, options} = require('../manifest');
-// const winston = require('winston');
-// winston.level = 'debug';
+const MockPayment = require('../plugin/payment-mock');
+
+// Inject mock payment module
+manifest.register.plugins.push({plugin: MockPayment});
 
 let server;
 
