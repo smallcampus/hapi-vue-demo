@@ -2,8 +2,10 @@
 
 ####Project Description
 
-This project demo the use of hapi, swagger, mongo, redis and vue to perform a payment process.
+This project demo the use of hapi, swagger, mongo, redis, stripe and vue to perform a payment process.
 It contains an API built with hapi and a CMS built with vue.
+
+Stripe is integrated as a testing payment gateway.
 
 You may create a order and search a order by refId in the CMS.
 
