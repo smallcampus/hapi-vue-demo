@@ -14,8 +14,8 @@
     "credit-card-type": "^6.1.1",
     "glue": "^5.0.0",
     "hapi": "^17.2.0",
-    "hapi-mongodb": "^7.1.0",
-    "hapi-swagger": "^9.0.2",
+    "hapi-mongodb": "^9.0.0",
+    "hapi-swagger": "^10.0.2",
     "hapi-test": "^5.2.0",
     "inert": "^5.1.0",
     "joi": "^13.1.2",
@@ -27,8 +27,9 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
+    "ava": "^2.1.0",
     "eslint": "^4.17.0",
-    "eslint-config-google": "^0.9.1"
+    "eslint-config-google": "^0.9.1",
+    "npm-check": "^5.9.0"
   }
 }
