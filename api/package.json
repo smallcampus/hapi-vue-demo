@@ -15,7 +15,7 @@
     "glue": "^5.0.0",
     "hapi": "^17.2.0",
     "hapi-mongodb": "^9.0.0",
-    "hapi-swagger": "^10.0.2",
+    "hapi-swagger": "^14.5.5",
     "hapi-test": "^5.2.0",
     "inert": "^5.1.0",
     "joi": "^13.1.2",
